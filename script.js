@@ -12,15 +12,19 @@ function addTask(){
         var span = document.createElement("span");
         span.innerHTML = "\u00d7";
         li.appendChild(span);
+
+        li.dataset.checked = "false";
+        saveData();
     }
     inputBox.value = "";
-    saveData();
 }
 
 // add event when user click a task, either done or remove it
 listContainer.addEventListener("click", function(e){
     if(e.target.tagName === "LI"){
         e.target.classList.toggle("checked");
+        e.target.dataset.checked = e.target.classList.contains("checked") ? "true" : "false";
+        saveData();
     } else if(e.target.tagName === "SPAN"){
         e.target.parentElement.remove();
         saveData();
@@ -34,6 +38,13 @@ function saveData(){
 
 function showTask(){
     listContainer.innerHTML = localStorage.getItem("data");
+
+    const tasks = listContainer.querySelectorAll("li");
+    tasks.forEach(task => {
+        if (task.dataset.checked === "true") {
+            task.classList.add("checked");
+        }
+    });
 }
 showTask();
 
